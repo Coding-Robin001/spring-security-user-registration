@@ -1,6 +1,7 @@
 package com.codingRobin.spring_security_client.controller;
 
 import com.codingRobin.spring_security_client.entity.User;
+import com.codingRobin.spring_security_client.event.RegistrationCompleteEvent;
 import com.codingRobin.spring_security_client.model.UserModel;
 import com.codingRobin.spring_security_client.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class RegistrationController {
     @PostMapping("/register")
     public String registerUser(@RequestBody UserModel userModel){
         User user = userService.registerUser(userModel);
-        publisher.publishEvent();
+        publisher.publishEvent(new RegistrationCompleteEvent(user, "url"));
         return "Registration Successful!";
     }
 }
