@@ -1,6 +1,7 @@
 package com.codingRobin.spring_security_client.service;
 
 import com.codingRobin.spring_security_client.entity.User;
+import com.codingRobin.spring_security_client.entity.VerificationToken;
 import com.codingRobin.spring_security_client.model.UserModel;
 import com.codingRobin.spring_security_client.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImplementation implements UserService{
+    @Override
+    public void saveVerficationTokenForUser(String token, User user) {
+        VerificationToken verificationToken = new VerificationToken(token, user);
+    }
 
     @Autowired
     private PasswordEncoder passwordEncoder;
