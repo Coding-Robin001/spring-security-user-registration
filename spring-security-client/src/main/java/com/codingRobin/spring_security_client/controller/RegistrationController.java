@@ -4,6 +4,7 @@ import com.codingRobin.spring_security_client.entity.User;
 import com.codingRobin.spring_security_client.event.RegistrationCompleteEvent;
 import com.codingRobin.spring_security_client.model.UserModel;
 import com.codingRobin.spring_security_client.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,9 +22,14 @@ public class RegistrationController {
     private ApplicationEventPublisher publisher;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody UserModel userModel){
+    public String registerUser(@RequestBody UserModel userModel, final HttpServletRequest request){
         User user = userService.registerUser(userModel);
-        publisher.publishEvent(new RegistrationCompleteEvent(user, "url"));
+        publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return "Registration Successful!";
+    }
+
+    private String applicationUrl(HttpServletRequest request) {
+        return "http://" + request.getServerName() + ":" + request.getServerPort()
+                + request.getContextPath();
     }
 }
