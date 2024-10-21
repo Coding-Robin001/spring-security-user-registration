@@ -26,10 +26,13 @@ public class RegistrationController {
         return "Registration Successful!";
     }
 
-    @GetMapping(".verfiyRegistration")
+    @GetMapping("verfiyRegistration")
     public String verifyRegistration(@RequestParam("token") String token){
         String result = userService.validatVerificationToken(token);
-
+        if (result.equalsIgnoreCase("valid")){
+            return "User verification Successful!"
+        }
+        return "user verification failed!"
     }
 
     private String applicationUrl(HttpServletRequest request) {
