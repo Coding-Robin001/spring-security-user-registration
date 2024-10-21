@@ -26,7 +26,7 @@ public class RegistrationCompleteEventListener implements
         userService.saveVerficationTokenForUser(token, user);
 
 //        construct url link with verificationToken
-        String url = event.getApplicationUrl() + "verifyRegistration?token=" + token;
+        String url = event.getApplicationUrl() + "/verifyRegistration?token=" + token;
 
 //        sendEmailMethod here
         log.info("click ink to verify account: {}", url);

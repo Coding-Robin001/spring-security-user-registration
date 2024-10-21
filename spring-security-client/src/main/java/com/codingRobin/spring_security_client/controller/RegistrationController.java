@@ -8,9 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class RegistrationController {
@@ -26,6 +24,12 @@ public class RegistrationController {
         User user = userService.registerUser(userModel);
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return "Registration Successful!";
+    }
+
+    @GetMapping(".verfiyRegistration")
+    public String verifyRegistration(@RequestParam("token") String token){
+        String result = userService.validatVerificationToken(token);
+
     }
 
     private String applicationUrl(HttpServletRequest request) {
