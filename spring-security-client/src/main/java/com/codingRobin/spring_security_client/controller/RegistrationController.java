@@ -1,6 +1,7 @@
 package com.codingRobin.spring_security_client.controller;
 
 import com.codingRobin.spring_security_client.entity.User;
+import com.codingRobin.spring_security_client.entity.VerificationToken;
 import com.codingRobin.spring_security_client.event.RegistrationCompleteEvent;
 import com.codingRobin.spring_security_client.model.UserModel;
 import com.codingRobin.spring_security_client.service.UserService;
@@ -36,7 +37,8 @@ public class RegistrationController {
     }
 
     @GetMapping("/resendVerfiyToken")
-    public String resendVerficationToken(){
+    public String resendVerficationToken(@RequestParam("token") String oldToken, HttpServletRequest request){
+        VerificationToken verificationToken = userService.generateNewVerificationToken(oldToken);
 
     }
 
