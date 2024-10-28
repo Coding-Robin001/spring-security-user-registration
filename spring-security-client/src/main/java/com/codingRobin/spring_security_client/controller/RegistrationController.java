@@ -30,9 +30,14 @@ public class RegistrationController {
     public String verifyRegistration(@RequestParam("token") String token){
         String result = userService.validatVerificationToken(token);
         if (result.equalsIgnoreCase("valid")){
-            return "User verification Successful!"
+            return "User verification Successful!";
         }
-        return "user verification failed!"
+        return "user verification failed!";
+    }
+
+    @GetMapping("/resendVerfiyToken")
+    public String resendVerficationToken(){
+
     }
 
     private String applicationUrl(HttpServletRequest request) {

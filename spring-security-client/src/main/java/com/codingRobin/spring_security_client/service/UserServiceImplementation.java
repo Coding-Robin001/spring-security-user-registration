@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+
 @Service
 public class UserServiceImplementation implements UserService{
 
@@ -38,5 +40,43 @@ public class UserServiceImplementation implements UserService{
     public void saveVerficationTokenForUser(String token, User user) {
         VerificationToken verificationToken = new VerificationToken(token, user);
         verficationTokenRepository.save(verificationToken);
+    }
+
+    @Override
+    public String validateVerficationToken(String token) {
+        VerificationToken verificationToken = verficationTokenRepository.findByToken(token);
+        if (verificationToken == null){
+            return "Invalid Token";
+        }
+        User user = verificationToken.getUser();
+        Calendar calendar = Calendar.getInstance();
+
+        if(verificationToken.getExpirationTime().getTime() - calendar.getTime().getTime() <= 0){
+            verficationTokenRepository.delete(verificationToken);
+            return "token expired!";
+        }
+
+        user.setEnabled(true);
+        userRepository.save(user);
+        return "valid";
+    }
+
+    @Override
+    public String validatVerificationToken(String token) {
+        VerificationToken verificationToken = verficationTokenRepository.findByToken(token);
+        if (verificationToken == null){
+            return "Invalid Token";
+        }
+        User user = verificationToken.getUser();
+        Calendar calendar = Calendar.getInstance();
+
+        if(verificationToken.getExpirationTime().getTime() - calendar.getTime().getTime() <= 0){
+            verficationTokenRepository.delete(verificationToken);
+            return "token expired!";
+        }
+
+        user.setEnabled(true);
+        userRepository.save(user);
+        return "valid";
     }
 }
