@@ -95,6 +95,6 @@ public class UserServiceImplementation implements UserService{
 
     @Override
     public void createPasswordResetTokenForUser(User user, String token) {
-        
+
     }
 }
