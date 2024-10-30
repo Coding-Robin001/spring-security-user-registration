@@ -3,6 +3,7 @@ package com.codingRobin.spring_security_client.controller;
 import com.codingRobin.spring_security_client.entity.User;
 import com.codingRobin.spring_security_client.entity.VerificationToken;
 import com.codingRobin.spring_security_client.event.RegistrationCompleteEvent;
+import com.codingRobin.spring_security_client.model.PasswordModel;
 import com.codingRobin.spring_security_client.model.UserModel;
 import com.codingRobin.spring_security_client.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,8 +40,12 @@ public class RegistrationController {
     }
 
     @PostMapping("/resetPassword")
-    public String resetPassword(@RequestBody){
+    public String resetPassword(@RequestBody PasswordModel passwordModel){
 
+        User user = UserService.findUserByEmail(passwordModel.getEmail());
+        if( user != null){
+            
+        }
     }
 
     @GetMapping("/resendVerfiyToken")

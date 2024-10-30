@@ -14,6 +14,10 @@ import java.util.UUID;
 
 @Service
 public class UserServiceImplementation implements UserService{
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findbyEmail(email);
+    }
 
     @Autowired
     private PasswordEncoder passwordEncoder;
