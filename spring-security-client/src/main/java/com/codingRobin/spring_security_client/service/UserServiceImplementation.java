@@ -4,6 +4,7 @@ import com.codingRobin.spring_security_client.entity.PasswordResetToken;
 import com.codingRobin.spring_security_client.entity.User;
 import com.codingRobin.spring_security_client.entity.VerificationToken;
 import com.codingRobin.spring_security_client.model.UserModel;
+import com.codingRobin.spring_security_client.repository.PasswordResetTokenRepository;
 import com.codingRobin.spring_security_client.repository.UserRepository;
 import com.codingRobin.spring_security_client.repository.VerficationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,6 @@ import java.util.UUID;
 
 @Service
 public class UserServiceImplementation implements UserService{
-    @Override
-    public User findUserByEmail(String email) {
-        return userRepository.findbyEmail(email);
-    }
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -28,6 +25,9 @@ public class UserServiceImplementation implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Override
     public User registerUser(UserModel userModel) {
@@ -97,5 +97,28 @@ public class UserServiceImplementation implements UserService{
     @Override
     public void createPasswordResetTokenForUser(User user, String token) {
         PasswordResetToken passwordResetToken = new PasswordResetToken(token, user);
+        passwordResetTokenRepository.save(passwordResetToken);
     }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findbyEmail(email);
+    }
+
+    @Override
+    public String validatePasswordToken(String token) {
+        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
+        if (passwordResetToken == null){
+            return "Invalid Token";
+        }
+        User user = passwordResetToken.getUser();
+        Calendar calendar = Calendar.getInstance();
+
+        if(passwordResetToken.getExpirationTime().getTime() - calendar.getTime().getTime() <= 0){
+            passwordResetTokenRepository.delete(passwordResetToken);
+            return "token expired!";
+        }
+        return "valid";
+    }
+
 }

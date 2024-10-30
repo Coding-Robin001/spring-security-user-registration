@@ -7,6 +7,8 @@ import com.codingRobin.spring_security_client.model.UserModel;
 public interface UserService {
     User findUserByEmail(String email);
 
+    String validatePasswordToken(String token);
+
     User registerUser(UserModel userModel);
 
     void saveVerficationTokenForUser(String token, User user);
