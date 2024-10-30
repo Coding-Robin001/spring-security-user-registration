@@ -13,6 +13,8 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @Slf4j
 public class RegistrationController {
@@ -44,7 +46,8 @@ public class RegistrationController {
 
         User user = UserService.findUserByEmail(passwordModel.getEmail());
         if( user != null){
-            
+            String token = UUID.randomUUID().toString();
+            userService.createPasswordResetTokenForUser(user, token);
         }
     }
 

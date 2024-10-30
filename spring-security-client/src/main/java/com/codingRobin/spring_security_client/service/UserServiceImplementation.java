@@ -92,4 +92,9 @@ public class UserServiceImplementation implements UserService{
         verficationTokenRepository.save(verificationToken);
         return verificationToken;
     }
+
+    @Override
+    public void createPasswordResetTokenForUser(User user, String token) {
+        
+    }
 }

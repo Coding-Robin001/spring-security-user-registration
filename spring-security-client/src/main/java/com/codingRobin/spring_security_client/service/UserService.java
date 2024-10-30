@@ -5,7 +5,7 @@ import com.codingRobin.spring_security_client.entity.VerificationToken;
 import com.codingRobin.spring_security_client.model.UserModel;
 
 public interface UserService {
-    static User findUserByEmail(String email);
+    User findUserByEmail(String email);
 
     User registerUser(UserModel userModel);
 
@@ -16,4 +16,6 @@ public interface UserService {
     String validatVerificationToken(String token);
 
     VerificationToken generateNewVerificationToken(String oldToken);
+
+    void createPasswordResetTokenForUser(User user, String token);
 }
