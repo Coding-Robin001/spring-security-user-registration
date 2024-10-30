@@ -1,5 +1,6 @@
 package com.codingRobin.spring_security_client.service;
 
+import com.codingRobin.spring_security_client.entity.PasswordResetToken;
 import com.codingRobin.spring_security_client.entity.User;
 import com.codingRobin.spring_security_client.entity.VerificationToken;
 import com.codingRobin.spring_security_client.model.UserModel;
@@ -95,6 +96,6 @@ public class UserServiceImplementation implements UserService{
 
     @Override
     public void createPasswordResetTokenForUser(User user, String token) {
-
+        PasswordResetToken passwordResetToken = new PasswordResetToken(token, user);
     }
 }
