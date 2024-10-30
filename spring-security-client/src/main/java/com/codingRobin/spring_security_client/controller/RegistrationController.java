@@ -38,13 +38,17 @@ public class RegistrationController {
         return "user verification failed!";
     }
 
+    @PostMapping("/resetPassword")
+    public String resetPassword(@RequestBody){
+
+    }
+
     @GetMapping("/resendVerfiyToken")
     public String resendVerficationToken(@RequestParam("token") String oldToken, HttpServletRequest request){
         VerificationToken verificationToken = userService.generateNewVerificationToken(oldToken);
         User user = verificationToken.getUser();
         resendVerficationTokenMail(user, applicationUrl(request), verificationToken);
         return "verification Link Sent";
-
     }
 
     private void resendVerficationTokenMail(User user, String applicationUrl, VerificationToken verificationToken) {
