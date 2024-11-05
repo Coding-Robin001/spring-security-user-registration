@@ -94,7 +94,12 @@ public class RegistrationController {
     }
 
     @PostMapping("/changePassword")
-    public String changePassword(){
-
+    public String changePassword(@RequestBody PasswordModel passwordModel){
+        User user = userService.findUserByEmail(passwordModel.getEmail());
+        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())){
+            return "Invalid password!";
+        }
+//        take new password and save to DB
+        return "password changed successfully!";
     }
 }
