@@ -113,6 +113,11 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
+    public boolean checkIfValidOldPassword(User user, String oldPassword) {
+        return passwordEncoder.matches(oldPassword, user.getPassword());
+    }
+
+    @Override
     public User findUserByEmail(String email) {
         return userRepository.findbyEmail(email);
     }
