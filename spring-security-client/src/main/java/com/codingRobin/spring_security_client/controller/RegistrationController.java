@@ -42,35 +42,6 @@ public class RegistrationController {
         return "user verification failed!";
     }
 
-    @PostMapping("/resetPassword")
-    public String resetPassword(@RequestBody PasswordModel passwordModel, HttpServletRequest request){
-        User user = userService.findUserByEmail(passwordModel.getEmail());
-            String url = "";
-        if( user != null){
-            String token = UUID.randomUUID().toString();
-            userService.createPasswordResetTokenForUser(user, token);
-            url = passwordResetTokenMail(user, applicationUrl(request), token);
-        }
-        return "";
-    }
-
-    private String passwordResetTokenMail(User user, String applicationUrl, String token) {
-        String url = applicationUrl + "/resetpassword?token=" + token;
-        log.info("click link to reset passwordt: {}", url);
-        return url;
-    }
-
-    @PostMapping("/savePassword")
-    public String savePassword(@RequestParam("token") String token, @RequestBody PasswordModel passwordModel){
-        String result = userService.validatePasswordToken(token);
-        if(!result.equalsIgnoreCase("valid")){
-            return "invalid token!";
-        }
-        Optional<User> user = userService.getUserByResetToken();
-        return "";
-
-    }
-
     @GetMapping("/resendVerfiyToken")
     public String resendVerficationToken(@RequestParam("token") String oldToken, HttpServletRequest request){
         VerificationToken verificationToken = userService.generateNewVerificationToken(oldToken);
@@ -87,5 +58,43 @@ public class RegistrationController {
     private String applicationUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort()
                 + request.getContextPath();
+    }
+
+    @PostMapping("/resetPassword")
+    public String resetPassword(@RequestBody PasswordModel passwordModel, HttpServletRequest request){
+        User user = userService.findUserByEmail(passwordModel.getEmail());
+        String url = "";
+        if( user != null){
+            String token = UUID.randomUUID().toString();
+            userService.createPasswordResetTokenForUser(user, token);
+            url = passwordResetTokenMail(user, applicationUrl(request), token);
+        }
+        return url;
+    }
+
+    private String passwordResetTokenMail(User user, String applicationUrl, String token) {
+        String url = applicationUrl + "/resetpassword?token=" + token;
+        log.info("click link to reset passwordt: {}", url);
+        return url;
+    }
+
+    @PostMapping("/savePassword")
+    public String savePassword(@RequestParam("token") String token, @RequestBody PasswordModel passwordModel){
+        String result = userService.validatePasswordToken(token);
+        if(!result.equalsIgnoreCase("valid")){
+            return "invalid token!";
+        }
+        Optional<User> user = userService.getUserByResetToken(token);
+        if (user.isPresent()){
+            userService.changePassword(user.get(), passwordModel.getNewPassword());
+            return "password reset sucesfully!";
+        } else {
+            return  "invalid token!";
+        }
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(){
+
     }
 }
